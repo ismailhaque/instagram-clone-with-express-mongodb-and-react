@@ -1,0 +1,38 @@
+#login-facebook{
+    width: 80%;
+    height: 35px;
+    color: #fff;
+    background: rgba(0,149,246,1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+}
+
+.login-wraper h3{
+        color: rgba(142,142,142,1);
+        width: 80%;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 20px;
+        margin: 20px 0;
+        text-align: center;
+}
+.login-wraper p{
+    color: rgba(142,142,142,1);
+    font-size: 12px;
+    line-height: 16px;
+    width: 100%;
+    font-weight: 300;
+    margin: 10px 0;
+    text-align: center;
+}
+.login-wraper p a{
+    color: rgba(142,142,142,1);
+    font-size: 12px;
+    line-height: 16px;
+    width: 100%;
+    font-weight: 500;
+    margin: 10px 0;
+    text-align: center;
+}

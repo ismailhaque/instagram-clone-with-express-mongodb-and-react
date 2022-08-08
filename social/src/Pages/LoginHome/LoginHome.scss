@@ -1,0 +1,23 @@
+.login-container {
+    flex-direction: row;
+    gap: 30px;
+}
+
+.left-col {
+    background-image: url(../images/mobile.png);
+    height: 581.15px;
+    width: 370px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    margin-top: -40px;
+}
+
+#carouselExampleDrak{
+    margin-top: 17px;
+    margin-left: 113px;
+}
+
+.carousel-item img{
+    height: 505px;
+}
