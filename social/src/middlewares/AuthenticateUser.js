@@ -5,8 +5,8 @@ import AuthContext from "../Context/AuthContext"
 
 const AuthenticateUser = ( {children} ) => {
 
-    const { token } = useContext(AuthContext)
-    return token ? children : <Navigate to='/' />
+    const { isUserLoggedin } = useContext(AuthContext)
+    return isUserLoggedin ? children : <Navigate to='/login' />  
 
 }
 

@@ -189,3 +189,53 @@ export const createUser = async ( req, res, next ) => {
     }
 
 };
+/**
+ * @access public
+ * @route api/user/me
+ * @method get
+ */
+
+ export const getLoggedinUser = async ( req, res, next ) => {
+
+    try {
+
+        // get token
+        const bearer_token = req.headers.authorization;
+
+        // check token
+        let token = '';
+
+        if (bearer_token) {
+
+            let token = bearer_token.split(' ')[1];
+            
+            // check login user
+            const login_user = jwt.verify(token, 'GGLBb8VxNVDWjjh5paC+d/sTEiFgo3tu2bzQM/2KRKMmKm88uL+Br++0ZFnnewnzFmheI+L4ZlBsNf/lD6VT+Q==')
+
+            if (!login_user) {
+
+                next(createError(401, 'Invalid Token'))
+                
+            }
+            if (login_user) {
+
+                const user = await userModels.findById( login_user.id )
+
+                res.status(200).json(user)
+
+            }
+            
+        }
+        if (!bearer_token) {
+
+            next(createError(404, 'Token not found'))
+            
+        }
+
+    } catch (error) {
+
+        next(error);
+
+    }
+
+};

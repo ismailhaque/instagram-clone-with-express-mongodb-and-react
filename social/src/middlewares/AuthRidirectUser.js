@@ -5,8 +5,9 @@ import AuthContext from "../Context/AuthContext"
 
 const AuthRidirectUser = ( {children} ) => {
 
-    const { token } = useContext(AuthContext)
-    return !token ? children : <Navigate to={'/home'} />
+    const { isUserLoggedin } = useContext(AuthContext)
+    
+    return isUserLoggedin ? <Navigate to={'/home'}/> : children 
 
 }
 

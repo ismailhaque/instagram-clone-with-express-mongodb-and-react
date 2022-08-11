@@ -6,7 +6,7 @@ import './Login.scss';
 import instragram from '../images/instragram.png';
 import play from '../images/play-store.png';
 import app from '../images/app-store.png';
-import LoginRegisterFooter from '../LoginRegisterFooter/LoginRegisterFooter.jsx';
+import LoginRegisterFooter from '../../Components/LoginRegisterFooter/LoginRegisterFooter.jsx';
 import { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -68,9 +68,8 @@ const Login = () => {
         await axios.post('http://localhost:5000/api/user/login', input).then(res => {
 
           cookie.set('token', res.data.token)
-          cookie.set('user', JSON.stringify(res.data.user))
 
-          dispatch({type : 'LOGIN_USER', payload : res.data })
+          dispatch({type : 'LOGIN_USER_SUCCESS', payload : res.data })
 
           navigate('/home')
 

@@ -10,7 +10,7 @@ import screenshot1 from '../images/screenshot1.png';
 import screenshot2 from '../images/screenshot2.png';
 import screenshot3 from '../images/screenshot3.png';
 import screenshot4 from '../images/screenshot4.png';
-import LoginRegisterFooter from '../LoginRegisterFooter/LoginRegisterFooter.jsx';
+import LoginRegisterFooter from '../../Components/LoginRegisterFooter/LoginRegisterFooter.jsx';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
@@ -73,9 +73,8 @@ const handleForm = async (e) => {
       await axios.post('http://localhost:5000/api/user/login', input).then( res => {
 
       Cookies.set( 'token', res.data.token )
-      Cookies.set( 'user', JSON.stringify(res.data.user) )
 
-      dispatch({type : 'LOGIN_USER', payload : res.data })
+      dispatch({type : 'LOGIN_USER_SUCCESS', payload : res.data })
 
       navigate('/home')
         

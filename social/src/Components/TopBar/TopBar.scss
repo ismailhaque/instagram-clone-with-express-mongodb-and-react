@@ -1,0 +1,55 @@
+.topbar-container{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .top-wraper{
+        width: 1200px;
+    }
+
+    .search-box{
+        text-align: center;
+        border: none;
+    }
+    .search-box button{
+        text-align: center;
+        border: none;
+        background: #efefef;
+        height: 35px;
+        padding: 0 10px;
+        font-size: 19px;
+        color: #737373;
+        border-radius: 7px 0 0 7px;
+    }
+    .search-box input{
+        text-align: center;
+        border: none;
+        height: 35px;
+        background: #efefef;
+        text-align: left;
+        font-size: 16px;
+        padding: 0 10px;
+        font-weight: 200;
+        color: #737373;
+        border-radius: 0px 7px 7px 0px;
+    }
+
+    .topbar-menu{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .topbar-menu ul{
+        display: flex;
+        gap: 22px;
+        align-items: center;
+        justify-content: center;
+    }
+    .topbar-menu ul li a{
+        font-size: 25px;
+        color: #000;
+    }
+}

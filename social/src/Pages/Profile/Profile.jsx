@@ -1,22 +1,18 @@
 import React from 'react'
 import TopBar from '../../Components/TopBar/TopBar'
-import './Home.scss'
+import './Profile'
 
-const Home = () => {
+const Profile = () => {
   return (
-
     <>
-
     <div className='topbar'>
       <TopBar />
     </div>
-
     
-    Home
-
+    profile
+    
     </>
-
   )
 }
 
-export default Home
+export default Profile

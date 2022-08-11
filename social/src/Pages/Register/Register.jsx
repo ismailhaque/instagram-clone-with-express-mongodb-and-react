@@ -7,7 +7,7 @@ import './Register.scss';
 import instragram from '../images/instragram.png';
 import play from '../images/play-store.png';
 import app from '../images/app-store.png';
-import LoginRegisterFooter from '../LoginRegisterFooter/LoginRegisterFooter.jsx';
+import LoginRegisterFooter from '../../Components/LoginRegisterFooter/LoginRegisterFooter.jsx';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

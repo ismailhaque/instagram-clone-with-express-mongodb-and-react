@@ -1,12 +1,11 @@
 import { useReducer } from "react";
 import AuthContext from "../Context/AuthContext.js";
-import cookie from 'js-cookie'
 import AuthReducer from "../Reducers/AuthReducers.js";
 
 
 const INITIAL_STATE = {
-    token : cookie.get('token') || null,
-    user : cookie.get('user') ? JSON.stringify(cookie.get('user')) : null
+    isUserLoggedin: false,
+    user : {}
 }
 
 
@@ -16,7 +15,7 @@ const AuthContextProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{
-            token : state.token,
+            isUserLoggedin : state.isUserLoggedin,
             user : state.user,
             dispatch
         }}>
