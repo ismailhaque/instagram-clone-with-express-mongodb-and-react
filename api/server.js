@@ -30,6 +30,9 @@ app.use(`/api/user`, userRoute);
 // use express error handler
 app.use( errorHandler );
 
+// static folder
+app.use('/public', express.static('public'))
+
 // listen server
 app.listen(port, () => {
     // mongoDB connect

@@ -11,153 +11,147 @@ import screenshot2 from '../images/screenshot2.png';
 import screenshot3 from '../images/screenshot3.png';
 import screenshot4 from '../images/screenshot4.png';
 import LoginRegisterFooter from '../../Components/LoginRegisterFooter/LoginRegisterFooter.jsx';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useContext } from 'react';
 import AuthContext from '../../Context/AuthContext';
+import LoaderContext from '../../Context/LoaderContext';
+import { createTost } from '../../utility/Alert/Alert';
+import swal from 'sweetalert';
 
 
 const LoginHome = () => {
 
-// use context
-const { dispatch } = useContext(AuthContext)
+  // use context
+  const { dispatch } = useContext(AuthContext)
+  // use context
+  const { loader_dispatch } = useContext(LoaderContext)
 
-// create navigate
-const navigate = useNavigate()
+  // create navigate
+  const navigate = useNavigate()
 
-// create toast
-const createTost = (type, msg) => {
+  const [input, setInput] = useState({
+    email: '',
+    password: ''
+  })
 
-  switch (type) {
+  const handleInput = (e) => {
 
-    case 'error':
-      return toast.error(msg)
-      break;
+    setInput({ ...input, [e.target.name]: e.target.value })
 
-    case 'success':
-      return toast.success(msg)
-      break;
-  
-    default:
-      break;
   }
-  
-}
 
-const[ input, setInput]= useState({
-  email : '',
-  password : ''
-})
+  const handleForm = async (e) => {
 
-const handleInput = (e) => {
+    e.preventDefault()
 
-  setInput({ ...input, [e.target.name] : e.target.value})
+    try {
 
-}
+      if (!input.email || !input.password) {
 
-const handleForm = async (e) => {
+        createTost('error', 'All feilds are required');
 
-  e.preventDefault()
+      } else {
 
-  try {
+        await axios.post('http://localhost:5000/api/user/login', input).then(res => {
 
-    if ( !input.email || !input.password ) {
+          Cookies.set('token', res.data.token);
 
-      createTost( 'error', 'All feilds are required');
-      
-    } else {
+          if (!res.data.user.isVerify) {
 
-      await axios.post('http://localhost:5000/api/user/login', input).then( res => {
+            swal({
+              title: "Sorry!",
+              text: "Please Verify Your Email",
+              icon: "error",
+              button: "Ok",
+            });
 
-      Cookies.set( 'token', res.data.token )
+          }
+          if (res.data.user.isVerify) {
 
-      dispatch({type : 'LOGIN_USER_SUCCESS', payload : res.data })
+            dispatch({ type: 'LOGIN_USER_SUCCESS', payload: res.data })
 
-      navigate('/home')
-        
-      })
+            navigate('/home')
+            loader_dispatch({ type: 'LOADER_START' });
 
+          }
+
+
+        })
+
+      }
+
+    } catch (error) {
+      createTost('error', 'Wrong email or password')
     }
-    
-  } catch (error) {
-    createTost( 'error', 'Wrong email or password')
+
   }
 
-}
+  const loader = () => {
+    loader_dispatch({ type: 'LOADER_START' });
+  }
+
 
   return (
     <>
-        
-    <div className="login-container">
-    <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+
+      <div className="login-container">
         <div className="left-col">
-            <div id="carouselExampleDrak" className="carousel carousel-drak slide" data-bs-ride="carousel">
-                <div className="carousel-inner">
-                    <div className="carousel-item active" data-bs-interval="1000">
-                        <img src={ screenshot1 } className="d-block" alt=""/>
-                    </div>
-                    <div className="carousel-item" data-bs-interval="2000">
-                        <img src={screenshot2} className="d-block" alt=""/>
-                    </div>
-                    <div className="carousel-item" data-bs-interval="3000">
-                        <img src={screenshot3} className="d-block" alt=""/>
-                    </div>
-                    <div className="carousel-item" data-bs-interval="4000">
-                        <img src={screenshot4} className="d-block" alt=""/>
-                    </div>
-                </div>
+          <div id="carouselExampleDrak" className="carousel carousel-drak slide" data-bs-ride="carousel">
+            <div className="carousel-inner">
+              <div className="carousel-item active" data-bs-interval="1000">
+                <img src={screenshot1} className="d-block" alt="" />
+              </div>
+              <div className="carousel-item" data-bs-interval="2000">
+                <img src={screenshot2} className="d-block" alt="" />
+              </div>
+              <div className="carousel-item" data-bs-interval="3000">
+                <img src={screenshot3} className="d-block" alt="" />
+              </div>
+              <div className="carousel-item" data-bs-interval="4000">
+                <img src={screenshot4} className="d-block" alt="" />
+              </div>
             </div>
+          </div>
         </div>
 
         <div className="right-col">
-            <div className="login-wraper">
-            <Link to='/login'> <img className='login-logo' src={instragram} alt="" /></Link>
-            <form onSubmit={ handleForm } className="login-form">
-                <input className='form-input' onChange={ handleInput } value={ input.email } name='email' type="text" placeholder='Phone number, username, or email'/>
-            
-                <input className='form-input' onChange={ handleInput } value={ input.password } name='password' type="password" placeholder='Password'/>
-            
-                <input className='login-submit' type="submit" value="Login"/>
+          <div className="login-wraper">
+            <Link onClick={loader} to='/login'> <img className='login-logo' src={instragram} alt="" /></Link>
+            <form onSubmit={handleForm} className="login-form">
+              <input className='form-input' onChange={handleInput} value={input.email} name='email' type="text" placeholder='Phone number, username, or email' />
+
+              <input className='form-input' onChange={handleInput} value={input.password} name='password' type="password" placeholder='Password' />
+
+              <input className='login-submit' type="submit" value="Login" />
             </form>
             <div className="divider">
-                OR
+              OR
             </div>
-                <a href="#" className='login-with-fb'> <FaFacebookSquare/> Log in with Facebook</a>
-                <a href="#" className='forget-password'>Forgot password?</a>
+            <a href="#" className='login-with-fb'> <FaFacebookSquare /> Log in with Facebook</a>
+            <Link onClick={loader} to={'/forgot-password'} className='forget-password'>Forgot password?</Link>
+          </div>
+
+          <div className="signup-wraper">
+            <p>Don't have an account? <Link onClick={loader} className='signup-btn' to='/register'>Sign up</Link></p>
+          </div>
+
+          <div className="get-app">
+
+            <p>Get the app.</p>
+
+            <div className="get-images">
+              <a href="#"><img src={app} alt="" /></a>
+              <a href="#"><img src={play} alt="" /></a>
             </div>
 
-            <div className="signup-wraper">
-                <p>Don't have an account? <Link className='signup-btn' to='/register'>Sign up</Link></p>
-            </div>
-
-            <div className="get-app">
-
-                <p>Get the app.</p>
-
-                <div className="get-images">
-                <a href="#"><img src={app} alt="" /></a>
-                <a href="#"><img src={play} alt="" /></a>
-                </div>
-
-            </div>
+          </div>
         </div>
-    </div>
-    
+      </div>
 
-    <LoginRegisterFooter/>
+
+      <LoginRegisterFooter />
 
     </>
   )

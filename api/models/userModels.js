@@ -26,7 +26,15 @@ const userSchema = mongoose.Schema({
         required : true,
         trim : true
     },
+    photo : {
+        type : String,
+        default : 'avatar.png'
+    },
     isAdmin : {
+        type : Boolean,
+        default : false
+    },
+    isVerify : {
         type : Boolean,
         default : false
     },

@@ -8,40 +8,27 @@ import play from '../images/play-store.png';
 import app from '../images/app-store.png';
 import LoginRegisterFooter from '../../Components/LoginRegisterFooter/LoginRegisterFooter.jsx';
 import { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import cookie from 'js-cookie';
 import { useContext } from 'react';
 import AuthContext from '../../Context/AuthContext';
+import LoaderContext from '../../Context/LoaderContext';
+import { createTost } from '../../utility/Alert/Alert';
+import swal from 'sweetalert';
 
 
 const Login = () => {
 
+  // use Auth context
   const { dispatch } = useContext(AuthContext)
+
+  // use loader context
+  const { loader_dispatch } = useContext(LoaderContext);
+
 
 
   // create navigate
   const navigate = useNavigate()
-
-  // create toast
-  const createTost = (type, msg) => {
-
-    switch (type) {
-
-      case 'error':
-        return toast.error(msg)
-        break;
-
-      case 'success':
-        return toast.success(msg)
-        break;
-
-      default:
-        break;
-    }
-
-  }
 
   const [input, setInput] = useState({
     email: '',
@@ -69,9 +56,26 @@ const Login = () => {
 
           cookie.set('token', res.data.token)
 
-          dispatch({type : 'LOGIN_USER_SUCCESS', payload : res.data })
+          if (res.data.user.isVerify) {
 
-          navigate('/home')
+            cookie.set('token', res.data.token)
+
+            dispatch({ type: 'LOGIN_USER_SUCCESS', payload: res.data })
+
+            navigate('/home')
+            loader_dispatch({ type: 'LOADER_START' });
+
+          }
+          if (!res.data.user.isVerify) {
+
+            swal({
+              title: "Sorry!",
+              text: "Please Verify Your Email",
+              icon: "error",
+              button: "Ok",
+            });
+
+          }
 
         })
 
@@ -83,25 +87,18 @@ const Login = () => {
 
   }
 
+  const loader = () => {
+    loader_dispatch({ type: 'LOADER_START' });
+  }
+
 
   return (
     <>
 
       <div className="login-container">
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-        />
         <div>
           <div className="login-wraper">
-            <Link to='/login'> <img className='login-logo' src={instragram} alt="" /></Link>
+            <Link onClick={loader} to='/login'> <img className='login-logo' src={instragram} alt="" /></Link>
             <form onSubmit={handleFormSubmit} className="login-form">
               <input name='email' className='form-input' type="text" onChange={handleInput} value={input.email} placeholder='Phone number, username, or email' />
 
@@ -113,11 +110,11 @@ const Login = () => {
               OR
             </div>
             <a href="#" className='login-with-fb'> <FaFacebookSquare /> Log in with Facebook</a>
-            <a href="#" className='forget-password'>Forgot password?</a>
+            <Link onClick={loader} to={'/forgot-password'} className='forget-password'>Forgot password?</Link>
           </div>
 
           <div className="signup-wraper">
-            <p>Don't have an account? <Link className='signup-btn' to='/register'>Sign up</Link></p>
+            <p>Don't have an account? <Link onClick={loader} className='signup-btn' to='/register'>Sign up</Link></p>
           </div>
 
           <div className="get-app">

@@ -1,0 +1,15 @@
+.verify-container{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    .verify-card{
+        width: 300px;
+        text-align: center;
+        border: 1px solid #e9e9e9;
+        padding: 30px 20px;
+    }
+}
