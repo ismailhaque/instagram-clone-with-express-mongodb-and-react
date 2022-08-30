@@ -1,19 +1,20 @@
-.topbar-container{
+.topbar-container {
     width: 100%;
     height: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    .top-wraper{
+    .top-wraper {
         width: 1200px;
     }
 
-    .search-box{
+    .search-box {
         text-align: center;
         border: none;
     }
-    .search-box button{
+
+    .search-box button {
         text-align: center;
         border: none;
         background: #efefef;
@@ -23,7 +24,8 @@
         color: #737373;
         border-radius: 7px 0 0 7px;
     }
-    .search-box input{
+
+    .search-box input {
         text-align: center;
         border: none;
         height: 35px;
@@ -36,19 +38,74 @@
         border-radius: 0px 7px 7px 0px;
     }
 
-    .topbar-menu{
+    .topbar-menu {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
     }
 
-    .topbar-menu ul{
+    .topbar-menu ul {
         display: flex;
         gap: 22px;
         align-items: center;
         justify-content: center;
+
+        .profile {
+            position: relative;
+
+
+            .profile_submenu {
+
+                position: absolute;
+                display: none;
+                gap: 10px;
+                flex-direction: column;
+                width: 200px;
+                background: #fff;
+                padding: 10px 0px 0;
+                transform: translate(10px, 10px);
+                right: 0px;
+                top: 50px;
+                align-items: flex-start;
+                border: 1px solid #e9e9e9;
+            }
+            .profile_submenu.active {
+                position: absolute;
+                display: flex;
+                gap: 10px;
+                flex-direction: column;
+                width: 200px;
+                background: #fff;
+                padding: 10px 0px 0;
+                transform: translate(10px, 10px);
+                right: 0px;
+                top: 50px;
+                align-items: flex-start;
+                border: 1px solid #e9e9e9;
+
+                .logout{
+                    border-top: 1px solid #e9e9e9;
+                    width: 200px;
+                    padding: 7px 0;
+                }
+
+                a{
+                    text-decoration: none;
+                    padding: 0 20px;
+                    font-size: 15px;
+                    font-weight: 400;
+
+                    svg{
+                        font-size: 16px;
+                        margin-right: 6px;
+                    }
+                }
+            }
+        }
+
     }
-    .topbar-menu ul li a{
+
+    .topbar-menu ul li a {
         font-size: 25px;
         color: #000;
     }

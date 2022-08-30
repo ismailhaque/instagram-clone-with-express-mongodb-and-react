@@ -7,7 +7,7 @@ const AuthRidirectUser = ( {children} ) => {
 
     const { isUserLoggedin } = useContext(AuthContext)
     
-    return isUserLoggedin ? <Navigate to={'/home'}/> : children 
+    return !isUserLoggedin ?  children  : <Navigate to={'/'}/>
 
 }
 

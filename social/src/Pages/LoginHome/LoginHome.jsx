@@ -72,7 +72,7 @@ const LoginHome = () => {
 
             dispatch({ type: 'LOGIN_USER_SUCCESS', payload: res.data })
 
-            navigate('/home')
+            navigate('/')
             loader_dispatch({ type: 'LOADER_START' });
 
           }

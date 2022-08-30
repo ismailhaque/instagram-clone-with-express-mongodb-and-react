@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import './App.scss';
 import AuthenticateUser from "./middlewares/AuthenticateUser";
 import AuthRidirectUser from "./middlewares/AuthRidirectUser";
-import './App.scss';
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";
 import LoginHome from "./Pages/LoginHome/LoginHome";
@@ -18,11 +18,27 @@ import swal from "sweetalert";
 import EmailVerify from "./Pages/verify/EmailVerify/Verify";
 import ForgotPassword from "./Pages/verify/ForgotPassword/ForgotPassword";
 import RecovaryPassword from "./Pages/verify/RecovaryPassword/recovaryPassword";
+import Posts from "./Pages/Profile/post/Posts";
+import Tagged from "./Pages/Profile/tagged/Tagged";
+import Saved from "./Pages/Profile/saved/Saved";
+import Setting from "./Pages/Setting/Setting";
+import Edit_Profile from "./Pages/Setting/Edit_Profile/Edit_Profile";
+import Professional_Account from "./Pages/Setting/Professional_Account/Professional_Account";
+import Change_Password from "./Pages/Setting/change_Password/Change_Password";
+import App_and_website from "./Pages/Setting/App_and_website/App_and_website";
+import Email_from_instagram from "./Pages/Setting/Email_form_Instagram/Email_from_instagram";
+import Login_activity from "./Pages/Setting/Login_activity/Login_activity";
+import Push_notifications from "./Pages/Setting/Push_notifications/Push_notifications";
+import Manage_contacts from "./Pages/Setting/Manage_contacts/Manage_contacts";
+import PrivacyAndSecurity from "./Pages/Setting/PrivacyAndSecurity/PrivacyAndSecurity";
+import Help from "./Pages/Setting/Help/Help";
+import EmailNotifications from "./Pages/Setting/EmailNotifications/EmailNotifications";
 
 
 function App() {
   // useContext
-  const { dispatch } = useContext(AuthContext);
+  const { isUserLoggedin, dispatch } = useContext(AuthContext);
+
   // useContext
   const { loader_state, loader_dispatch } = useContext(LoaderContext);
 
@@ -46,7 +62,7 @@ function App() {
         if (res.data.isVerify && token) {
 
           dispatch({ type: 'LOGIN_USER_SUCCESS', payload: res.data })
-          navigate('/home')
+          navigate('/')
 
         } else {
 
@@ -79,12 +95,28 @@ function App() {
       />
 
       <Routes>
-        <Route path="/" element={<AuthRidirectUser> <LoginHome /> </AuthRidirectUser>} />
-        <Route path="/home" element={<AuthenticateUser> <Home /> </AuthenticateUser>} />
+        <Route path="/" element={ isUserLoggedin ? <Home /> : <LoginHome /> } />
         <Route path="/verify/:token" element={<EmailVerify />} />
         <Route path="/reset_password/:token" element={<RecovaryPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/profile" element={<AuthenticateUser> <Profile /> </AuthenticateUser>} />
+        <Route path="/profile" element={<AuthenticateUser> <Profile /> </AuthenticateUser>} >
+          <Route path="/profile/posts" element={ <Posts /> }/>
+          <Route path="/profile/saved" element={ <Saved /> }/>
+          <Route path="/profile/tagged" element={ <Tagged /> }/>
+        </Route>
+        <Route path="/setting" element={<Setting />}>
+          <Route path="/setting/edit_profile" element={ <Edit_Profile/> }/>
+          <Route path="/setting/professional_account" element={ <Professional_Account/> }/>
+          <Route path="/setting/app_and_website" element={ <App_and_website/> }/>
+          <Route path="/setting/change_password" element={ <Change_Password/> }/>
+          <Route path="/setting/email_from_instagram" element={ <Email_from_instagram/> }/>
+          <Route path="/setting/login_activity" element={ <Login_activity/> }/>
+          <Route path="/setting/push_notifications" element={ <Push_notifications/> }/>
+          <Route path="/setting/manage_contacts" element={ <Manage_contacts/> }/>
+          <Route path="/setting/privacy_and_security" element={ <PrivacyAndSecurity/> }/>
+          <Route path="/setting/help" element={ <Help/> }/>
+          <Route path="/setting/email_notifications" element={ <EmailNotifications/> }/>
+        </Route>
         <Route path="/login" element={<AuthRidirectUser> <Login /> </AuthRidirectUser>} />
         <Route path="/register" element={<AuthRidirectUser> <Register /> </AuthRidirectUser>} />
       </Routes>

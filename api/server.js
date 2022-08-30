@@ -6,19 +6,25 @@ import userRoute from './routes/userRoute.js'
 import mongoDBconnect from './config/db.js';
 import errorHandler from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
+import multer from 'multer';
 import cors from 'cors';
+import path from "path"
 
+
+const __dirname = path.resolve()
 
 //  init express
 const app = express();
 dotenv.config();
 
+console.log(process.env.JWT_SECRET);
+
 // middlewares
 app.use(express.json());
-app.use(express.urlencoded({ extended : false }));
+app.use(express.urlencoded({ extended: false }));
 // use cookie parser
 app.use(cookieParser());
-app.use( cors() );
+app.use(cors());
 
 // init env variables
 const port = process.env.PORT || 5000;
@@ -28,17 +34,18 @@ app.use(`/api/student`, studentRoute);
 app.use(`/api/user`, userRoute);
 
 // use express error handler
-app.use( errorHandler );
+app.use(errorHandler);
 
 // static folder
-app.use('/public', express.static('public'))
+app.use(express.static(path.join(__dirname + 'public')))
+
 
 // listen server
 app.listen(port, () => {
     // mongoDB connect
     mongoDBconnect();
 
-    console.log(`server is runing on port ${ port }`.bgGreen.black);
+    console.log(`server is runing on port ${port}`.bgGreen.black);
 
 })
 
