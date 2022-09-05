@@ -99,10 +99,10 @@ function App() {
         <Route path="/verify/:token" element={<EmailVerify />} />
         <Route path="/reset_password/:token" element={<RecovaryPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/profile" element={<AuthenticateUser> <Profile /> </AuthenticateUser>} >
-          <Route path="/profile/posts" element={ <Posts /> }/>
-          <Route path="/profile/saved" element={ <Saved /> }/>
-          <Route path="/profile/tagged" element={ <Tagged /> }/>
+        <Route path="/:username" element={<AuthenticateUser> <Profile /> </AuthenticateUser>} >
+          <Route path="/:username/posts" element={ <Posts /> }/>
+          <Route path="/:username/saved" element={ <Saved /> }/>
+          <Route path="/:username/tagged" element={ <Tagged /> }/>
         </Route>
         <Route path="/setting" element={<Setting />}>
           <Route path="/setting/edit_profile" element={ <Edit_Profile/> }/>

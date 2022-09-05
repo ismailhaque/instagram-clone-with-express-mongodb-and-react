@@ -23,16 +23,30 @@ import swal from 'sweetalert';
 
 const LoginHome = () => {
 
+
+  // email and phone number pattern
+  const phoneno = /^(01|8801|\+8801)[0-9]{9}$/;
+  const mailformat = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+  const username = /^[a-z0-9_.]+$/
+
   // use context
   const { dispatch } = useContext(AuthContext)
   // use context
   const { loader_dispatch } = useContext(LoaderContext)
 
+  // login alert
+  const [mess, setMass] = useState({
+    status: false,
+    type: 'danger',
+    message: 'test'
+  })
+
+
   // create navigate
   const navigate = useNavigate()
 
   const [input, setInput] = useState({
-    email: '',
+    phone_email_username: '',
     password: ''
   })
 
@@ -43,50 +57,154 @@ const LoginHome = () => {
   }
 
   const handleForm = async (e) => {
-
     e.preventDefault()
 
     try {
 
-      if (!input.email || !input.password) {
+      if (!input.phone_email_username || !input.password) {
 
-        createTost('error', 'All feilds are required');
+        setMass({
+          status: true,
+          type: 'danger',
+          message: 'All feilds are required!'
+        })
 
       } else {
 
-        await axios.post('http://localhost:5000/api/user/login', input).then(res => {
+        if (input.phone_email_username.match(mailformat)) {
 
-          Cookies.set('token', res.data.token);
+          await axios.post('http://localhost:5000/api/user/login', {
+            email: input.phone_email_username,
+            password: input.password
+          }).then(res => {
 
-          if (!res.data.user.isVerify) {
+            Cookies.set('token', res.data.token)
 
-            swal({
-              title: "Sorry!",
-              text: "Please Verify Your Email",
-              icon: "error",
-              button: "Ok",
-            });
+            if (res.data.user.isVerify) {
 
-          }
-          if (res.data.user.isVerify) {
+              dispatch({ type: 'LOGIN_USER_SUCCESS', payload: res.data })
 
-            dispatch({ type: 'LOGIN_USER_SUCCESS', payload: res.data })
+              navigate('/')
 
-            navigate('/')
-            loader_dispatch({ type: 'LOADER_START' });
+              loader_dispatch({ type: 'LOADER_START' });
 
-          }
+            }
 
+            if (!res.data.user.isVerify) {
 
-        })
+              setMass({
+                status: true,
+                type: 'danger',
+                message: 'Please verify your account'
+              })
+            }
+
+          }).catch(err => {
+
+            setMass({
+              status: true,
+              type: 'danger',
+              message: err.response.data.message
+            })
+
+          })
+
+        } else if (input.phone_email_username.match(phoneno)) {
+
+          await axios.post('http://localhost:5000/api/user/login', {
+
+            phone: input.phone_email_username,
+            password: input.password
+
+          }).then(res => {
+
+            Cookies.set('token', res.data.token)
+
+            if (res.data.user.isVerify) {
+
+              dispatch({ type: 'LOGIN_USER_SUCCESS', payload: res.data })
+
+              navigate('/')
+
+              loader_dispatch({ type: 'LOADER_START' });
+
+            }
+
+            if (!res.data.user.isVerify) {
+
+              setMass({
+                status: true,
+                type: 'danger',
+                message: 'Please verify your account'
+              })
+
+            }
+
+          }).catch(err => {
+            setMass({
+              status: true,
+              type: 'danger',
+              message: err.response.data.message
+            })
+          })
+
+        } else if (input.phone_email_username.match(username)) {
+
+          await axios.post('http://localhost:5000/api/user/login', {
+
+            username: input.phone_email_username,
+            password: input.password
+
+          }).then(res => {
+            Cookies.set('token', res.data.token)
+
+            if (res.data.user.isVerify) {
+
+              dispatch({ type: 'LOGIN_USER_SUCCESS', payload: res.data })
+
+              navigate('/')
+
+              loader_dispatch({ type: 'LOADER_START' });
+
+            }
+
+            if (!res.data.user.isVerify) {
+
+              setMass({
+                status: true,
+                type: 'danger',
+                message: 'Please verify your account'
+              })
+
+            }
+          }).catch(err => {
+
+            setMass({
+              status: true,
+              type: 'danger',
+              message: err.response.data.message
+            })
+
+          })
+
+        } else {
+
+          setMass({
+            status: true,
+            type: 'danger',
+            message: 'Please valid username or phone number or email'
+          })
+
+        }
 
       }
 
     } catch (error) {
-      createTost('error', 'Wrong email or password')
+      console.log(error);
     }
 
   }
+
 
   const loader = () => {
     loader_dispatch({ type: 'LOADER_START' });
@@ -120,7 +238,10 @@ const LoginHome = () => {
           <div className="login-wraper">
             <Link onClick={loader} to='/login'> <img className='login-logo' src={instragram} alt="" /></Link>
             <form onSubmit={handleForm} className="login-form">
-              <input className='form-input' onChange={handleInput} value={input.email} name='email' type="text" placeholder='Phone number, username, or email' />
+              {/* login alert */}
+              {mess.status && <p className={`alert register-alert alert-${mess.type} text-start`}>{mess.message}</p>}
+
+              <input className='form-input' onChange={handleInput} value={input.email} name='phone_email_username' type="text" placeholder='Phone number, username, or email' />
 
               <input className='form-input' onChange={handleInput} value={input.password} name='password' type="password" placeholder='Password' />
 

@@ -72,9 +72,9 @@ const TopBar = () => {
                   </a>
 
                   <ul className='profile_submenu'>
-                    <li><Link onClick={loader} to={'/profile/posts'}> <CgProfile /> Profile</Link></li>
-                    <li><Link onClick={loader} to={'/profile/saved'}><CgBookmark /> Saved</Link></li>
-                    <li><Link onClick={loader} to={'/setting/edit_profile'}><AiOutlineSetting /> Settings</Link></li>
+                    <li><Link onClick={loader} to={`/${user.username}/posts`}> <CgProfile /> Profile</Link></li>
+                    <li><Link onClick={loader} to={`/${user.username}/saved`}><CgBookmark /> Saved</Link></li>
+                    <li><Link onClick={loader} to={`/${user.username}/edit_profile`}><AiOutlineSetting /> Settings</Link></li>
                     <li><a onClick={log_out} href='#'> <MdOutlineChangeCircle /> Switch account</a></li>
                     <li className='logout'><a onClick={log_out} href="#">Log out</a></li>
                   </ul>

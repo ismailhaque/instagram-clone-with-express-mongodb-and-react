@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import userModels from '../models/userModels.js';
 import createError from "./errorController.js";
 import { sendMail } from '../utility/sendMail.js';
-import sendSms from '../utility/sendSms.js';
+import  { sendSms, blukSmsBd } from '../utility/sendSms.js';
 import jwt from 'jsonwebtoken'
 import { createToken, verifyToken } from '../utility/createToken.js';
 
@@ -40,23 +40,52 @@ export const createUser = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hash_pass = await bcrypt.hash(req.body.password, salt)
 
+    let check_email;
+    let check_phone;
+    let check_username;
+
     try {
 
-        const user = await userModels.create({
-            ...req.body,
-            password: hash_pass
-        })
+        if (req.body.email) {
+            check_email = await userModels.findOne({ email: req.body.email });
+        } else if (req.body.phone) {
+            check_phone = await userModels.findOne({ phone: req.body.phone });
+        }
 
-        // create json web token
-        const token = createToken({ id: user.id })
+        if (req.body.username) {
+            check_username = await userModels.findOne({ username: req.body.username });
+        }
 
-        await sendMail(req.body.email, 'instagram', `http://localhost:3000/verify/${token}`)
+        if (check_email) {
 
-        res.status(200).json({
+            next(createError(401, 'Your email already registerd'))
 
-            message: "User data create successfully"
+        } else if (check_phone) {
 
-        });
+            next(createError(401, 'Your phone number already registerd'))
+
+        } else if (check_username) {
+
+            next(createError(401, 'Username not available'))
+
+        } else {
+
+            const user = await userModels.create({
+                ...req.body,
+                password: hash_pass
+            })
+
+            res.send('account create successfully')
+
+            // create json web token
+            const token = createToken({ id: user._id })
+
+            if (req.body.email) {
+                await sendMail(req.body.email, 'instagram', `http://localhost:3000/verify/${token}`)
+            } else if (req.body.phone) {
+                await blukSmsBd(req.body.phone, `http://localhost:3000/verify/${token}`)
+            }
+        }
 
     } catch (error) {
 
@@ -158,23 +187,46 @@ export const updateUser = async (req, res, next) => {
 export const userLogin = async (req, res, next) => {
 
     try {
-
         // check user
-        const login_user = await userModels.findOne({ email: req.body.email });
+        let login_user;
+
+        if (req.body.email) {
+            login_user = await userModels.findOne({ email: req.body.email });
+        } else if (req.body.phone) {
+            login_user = await userModels.findOne({ phone: req.body.phone });
+        } else if (req.body.username) {
+            login_user = await userModels.findOne({ username: req.body.username });
+        }
 
         if (!login_user) {
-
-            next(createError(404, "user not found"))
-
+            next(createError(404, "user not registerd"))
         }
 
         // check password
-        const login_pass = await bcrypt.compare(req.body.password, login_user.password);
+        let login_pass;
 
-        if (!login_pass) {
+        if (login_user) {
 
-            next(createError(404, "wrong password"))
+            login_pass = await bcrypt.compare(req.body.password, login_user.password);
 
+            if (!login_pass) {
+                next(createError(404, "wrong password"))
+            } 
+
+            if(login_pass) {
+
+                // create json web token
+                const token = jwt.sign({ id: login_user._id }, 'GGLBb8VxNVDWjjh5paC+d/sTEiFgo3tu2bzQM/2KRKMmKm88uL+Br++0ZFnnewnzFmheI+L4ZlBsNf/lD6VT+Q==');
+
+                const {_id, password, ...login_info} = login_user._doc
+
+                // send respons
+                res.cookie("access_token", token).status(200).json({
+                    token: token,
+                    user : login_info
+                })
+
+            }
         }
 
         // create json web token
@@ -349,7 +401,7 @@ export const resetPassword = async (req, res, next) => {
             const hash_pass = await bcrypt.hash(req.body.password, salt)
 
             const user = await userModels.findByIdAndUpdate(valid_user.id, {
-                password : hash_pass
+                password: hash_pass
             })
 
             res.send('password change successful')
@@ -365,3 +417,4 @@ export const resetPassword = async (req, res, next) => {
     }
 
 };
+

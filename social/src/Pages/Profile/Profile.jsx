@@ -1,14 +1,21 @@
 import React from 'react'
+import { useContext } from 'react'
 import { AiOutlineSetting } from 'react-icons/ai'
 import { BsGrid3X3Gap, BsBookmark } from 'react-icons/bs'
 import { RiContactsBook2Line } from 'react-icons/ri'
 import { Link, Outlet } from 'react-router-dom'
 import LoginRegisterFooter from '../../Components/LoginRegisterFooter/LoginRegisterFooter'
 import TopBar from '../../Components/TopBar/TopBar'
+import AuthContext from '../../Context/AuthContext'
 import avatar from '../images/avatar.png'
 import './Profile.scss'
 
 const Profile = () => {
+
+
+  // use auth context
+  const {user} = useContext(AuthContext)
+
   const profile_photo = (e) => {
 
     console.log(e.target.value);
@@ -70,9 +77,9 @@ const Profile = () => {
 
         <div className="post-saved-taged-menu">
           <ul>
-            <li><Link onClick={profile_menu} className='btn' to={'/profile/posts'}> <span><BsGrid3X3Gap /></span>POSTS</Link></li>
-            <li><Link onClick={profile_menu} className='btn' to={'/profile/saved'}> <span><BsBookmark /></span>SAVED</Link></li>
-            <li><Link onClick={profile_menu} className='btn' to={'/profile/tagged'}><span><RiContactsBook2Line /></span> TAGGED</Link></li>
+            <li><Link onClick={profile_menu} className='btn' to={`/${user.username}/posts`}> <span><BsGrid3X3Gap /></span>POSTS</Link></li>
+            <li><Link onClick={profile_menu} className='btn' to={`/${user.username}/saved`}> <span><BsBookmark /></span>SAVED</Link></li>
+            <li><Link onClick={profile_menu} className='btn' to={`/${user.username}/tagged`}><span><RiContactsBook2Line /></span> TAGGED</Link></li>
           </ul>
         </div>
 

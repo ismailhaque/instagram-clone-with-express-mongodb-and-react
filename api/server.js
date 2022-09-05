@@ -6,7 +6,6 @@ import userRoute from './routes/userRoute.js'
 import mongoDBconnect from './config/db.js';
 import errorHandler from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
-import multer from 'multer';
 import cors from 'cors';
 import path from "path"
 
@@ -15,9 +14,7 @@ const __dirname = path.resolve()
 
 //  init express
 const app = express();
-dotenv.config();
-
-console.log(process.env.JWT_SECRET);
+dotenv.config;
 
 // middlewares
 app.use(express.json());
@@ -37,7 +34,7 @@ app.use(`/api/user`, userRoute);
 app.use(errorHandler);
 
 // static folder
-app.use(express.static(path.join(__dirname + 'public')))
+app.use(express.static( path.join(__dirname, 'public')));
 
 
 // listen server

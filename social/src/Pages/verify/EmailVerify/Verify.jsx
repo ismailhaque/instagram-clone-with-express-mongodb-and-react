@@ -18,7 +18,7 @@ const EmailVerify = () => {
             axios.post('http://localhost:5000/api/user/verify', params).then(res => {
 
                 Cookies.set('token', res.data.token)
-                navigate('/home')
+                navigate('/')
 
                 swal({
                     title: "Congratulation!",
