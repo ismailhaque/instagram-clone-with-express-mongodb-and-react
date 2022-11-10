@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import './App.scss';
 import AuthenticateUser from "./middlewares/AuthenticateUser";
 import AuthRidirectUser from "./middlewares/AuthRidirectUser";
@@ -54,9 +54,11 @@ function App() {
     try {
 
       axios.get('http://localhost:5000/api/user/me', {
+
         headers: {
           "Authorization": `Bearer ${token}`
         }
+
       }).then(res => {
 
         if (res.data.isVerify && token) {
@@ -73,10 +75,13 @@ function App() {
             button: "Ok",
           });
 
+          Cookies.remove('token')
+
         }
 
       }).catch(err => {
-        console.log(err);
+        dispatch({ type: 'LOGOUT_USER'})
+        Cookies.remove('token')
       })
 
     } catch (error) {
@@ -95,27 +100,27 @@ function App() {
       />
 
       <Routes>
-        <Route path="/" element={ isUserLoggedin ? <Home /> : <LoginHome /> } />
+        <Route path="/" element={isUserLoggedin ? <Home /> : <LoginHome />} />
         <Route path="/verify/:token" element={<EmailVerify />} />
         <Route path="/reset_password/:token" element={<RecovaryPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/:username" element={<AuthenticateUser> <Profile /> </AuthenticateUser>} >
-          <Route path="/:username/posts" element={ <Posts /> }/>
-          <Route path="/:username/saved" element={ <Saved /> }/>
-          <Route path="/:username/tagged" element={ <Tagged /> }/>
+          <Route path="/:username/posts" element={<Posts />} />
+          <Route path="/:username/saved" element={<Saved />} />
+          <Route path="/:username/tagged" element={<Tagged />} />
         </Route>
         <Route path="/setting" element={<Setting />}>
-          <Route path="/setting/edit_profile" element={ <Edit_Profile/> }/>
-          <Route path="/setting/professional_account" element={ <Professional_Account/> }/>
-          <Route path="/setting/app_and_website" element={ <App_and_website/> }/>
-          <Route path="/setting/change_password" element={ <Change_Password/> }/>
-          <Route path="/setting/email_from_instagram" element={ <Email_from_instagram/> }/>
-          <Route path="/setting/login_activity" element={ <Login_activity/> }/>
-          <Route path="/setting/push_notifications" element={ <Push_notifications/> }/>
-          <Route path="/setting/manage_contacts" element={ <Manage_contacts/> }/>
-          <Route path="/setting/privacy_and_security" element={ <PrivacyAndSecurity/> }/>
-          <Route path="/setting/help" element={ <Help/> }/>
-          <Route path="/setting/email_notifications" element={ <EmailNotifications/> }/>
+          <Route path="/setting/edit_profile" element={<Edit_Profile />} />
+          <Route path="/setting/professional_account" element={<Professional_Account />} />
+          <Route path="/setting/app_and_website" element={<App_and_website />} />
+          <Route path="/setting/change_password" element={<Change_Password />} />
+          <Route path="/setting/email_from_instagram" element={<Email_from_instagram />} />
+          <Route path="/setting/login_activity" element={<Login_activity />} />
+          <Route path="/setting/push_notifications" element={<Push_notifications />} />
+          <Route path="/setting/manage_contacts" element={<Manage_contacts />} />
+          <Route path="/setting/privacy_and_security" element={<PrivacyAndSecurity />} />
+          <Route path="/setting/help" element={<Help />} />
+          <Route path="/setting/email_notifications" element={<EmailNotifications />} />
         </Route>
         <Route path="/login" element={<AuthRidirectUser> <Login /> </AuthRidirectUser>} />
         <Route path="/register" element={<AuthRidirectUser> <Register /> </AuthRidirectUser>} />

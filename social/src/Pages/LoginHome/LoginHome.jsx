@@ -17,9 +17,6 @@ import Cookies from 'js-cookie';
 import { useContext } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import LoaderContext from '../../Context/LoaderContext';
-import { createTost } from '../../utility/Alert/Alert';
-import swal from 'sweetalert';
-
 
 const LoginHome = () => {
 

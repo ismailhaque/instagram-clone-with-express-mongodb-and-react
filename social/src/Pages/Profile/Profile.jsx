@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React from 'react'
 import { useContext } from 'react'
 import { AiOutlineSetting } from 'react-icons/ai'
@@ -16,10 +17,9 @@ const Profile = () => {
   // use auth context
   const {user} = useContext(AuthContext)
 
-  const profile_photo = (e) => {
+  const profile_photo = async (e) => {
 
-    console.log(e.target.value);
-
+    await axios.patch(`http://localhost:5000/api/user/${user.username}`, {photo : e.target.files[0].name})
   }
 
 
@@ -30,6 +30,8 @@ const Profile = () => {
 
     e.target.classList.add('active')
   }
+
+
   return (
     <>
       <div className='topbar'>

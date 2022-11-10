@@ -9,12 +9,9 @@ import app from '../images/app-store.png';
 import LoginRegisterFooter from '../../Components/LoginRegisterFooter/LoginRegisterFooter.jsx';
 import { useState } from 'react';
 import axios from 'axios';
-import cookie from 'js-cookie';
 import { useContext } from 'react';
 import AuthContext from '../../Context/AuthContext';
 import LoaderContext from '../../Context/LoaderContext';
-import { createTost } from '../../utility/Alert/Alert';
-import swal from 'sweetalert';
 import Cookies from 'js-cookie';
 
 

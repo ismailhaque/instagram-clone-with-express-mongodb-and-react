@@ -2,6 +2,19 @@ import express from 'express';
 import { createUser, deleteUser, getAllUser, getLoggedinUser, getSingleUser, resetPassword, sendResetPassEmail, updateUser, userEmailVerify, userLogin } from '../controllers/userController.js';
 import adminMiddleware from '../middlewares/adminMiddleware.js';
 import userMiddleware from '../middlewares/userMiddleware.js';
+import multer from 'multer'
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, '/public/media')
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        cb(null, file.fieldname + '-' + uniqueSuffix)
+    }
+})
+
+const upload = multer({ storage: storage })
 
 // init router
 const router = express.Router();
@@ -16,7 +29,7 @@ router.route('/reset-password').post(resetPassword);
 
 // Rest api route
 router.route('/').get(getAllUser).post(createUser);
-router.route('/:id').get(userMiddleware, getSingleUser).delete(deleteUser).put(userMiddleware, updateUser).patch(userMiddleware, updateUser);
+router.route('/:id').get(userMiddleware, getSingleUser).delete(deleteUser).put(upload.single('photo'), updateUser).patch(upload.single('photo'), updateUser);
 
 // export router
 export default router;

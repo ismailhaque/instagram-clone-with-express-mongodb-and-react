@@ -161,11 +161,11 @@ export const deleteUser = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
 
-    const { id } = req.params;
+    const { username } = req.params;
 
     try {
 
-        const user = await userModels.findByIdAndUpdate(id, req.body, { new: true })
+        const user = await userModels.findOneAndUpdate(username, req.body, { new: true })
 
         res.status(200).json(user);
 
